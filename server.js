@@ -71,6 +71,24 @@ app.post('/todos', async (req, res) => {
   }
 });
 
+// DELETE endpoint
+app.delete('/todos/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await Todo.findByIdAndDelete(id);
+
+    if (!result) {
+      return res.status(404).json({ message: 'Todo not found' });
+    }
+
+    res.status(200).json({ message: 'Todo deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
